@@ -1,8 +1,14 @@
+"use client";
 import Image from "next/image";
+import ChatInput from "./components/chat-input";
 
 export default function Home() {
+
+  // Get messages from firebase service form collection messages limiting the last 50 messages
+
+
   return (
-    <main className="flex w-full min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex w-full min-h-screen flex-col items-center justify-between p-8 ">
       <div className="flex-1 w-full space-y-6 overflow-y-auto rounded-xl bg-slate-200 p-4 text-sm leading-6 text-slate-900 shadow-sm dark:bg-slate-900 dark:text-slate-300 sm:text-base sm:leading-7">
         <div className="flex items-start">
           <img
@@ -10,6 +16,9 @@ export default function Home() {
             src="https://dummyimage.com/128x128/363536/ffffff&text=J"
           />
           <div className="flex rounded-b-xl rounded-tr-xl bg-slate-50 p-4 dark:bg-slate-800 sm:max-w-md md:max-w-2xl">
+            {/* User ID with hastag */}
+            <p className="font-bold">#1</p> 
+              {/* User name */}
             <p>Explain quantum computing in simple terms</p>
           </div>
         </div>
@@ -58,6 +67,8 @@ export default function Home() {
             </p>
           </div>
         </div>
+        {/* Input box with static text */}
+        <ChatInput onSend={(message) => console.log(message)} />
       </div>
     </main>
   );
