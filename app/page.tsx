@@ -5,7 +5,7 @@ import ChatInput from "./components/chat-input";
 export default function Home() {
 
   // Get messages from firebase service form collection messages limiting the last 50 messages
-
+  
 
   return (
     <main className="flex w-full min-h-screen flex-col items-center justify-between p-8 ">
