@@ -31,7 +31,6 @@ export default function Home() {
       //Get messages
       getLastMessages(50);
     } else {
-      console.log(user, "No hubo User");
       setIsModalOpen(true); // No user found, so open the modal
     }
   }, []);
@@ -58,7 +57,6 @@ export default function Home() {
   function handleUserSubmit(userName: string) {
     //Create random user
     const newUser = { ...createUser(), name: userName };
-    console.log(newUser, 'newUserrrrr');
     localStorage.setItem("user", JSON.stringify(newUser));
     setUser(newUser);
     //Get messages
