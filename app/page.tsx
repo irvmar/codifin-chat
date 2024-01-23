@@ -1,75 +1,123 @@
 "use client";
 import Image from "next/image";
 import ChatInput from "./components/chat-input";
+import useChatService from "./lib/hooks/useChatServise";
+import { useEffect, useRef, useState } from "react";
+import { Message } from "./models/message";
+import { User } from "./models/user";
+import MessageBubble from "./components/message-bubble";
+import useUserService from "./lib/hooks/useUser";
+import { Timestamp } from "firebase/firestore";
+import { v4 } from "uuid";
+import NameModalComponent from "./components/name-modal";
 
 export default function Home() {
+  const {
+    createMessage,
+    getLastMessages,
+    currentChatMessages: messages,
+  } = useChatService();
+  const { createUser } = useUserService();
+  const [user, setUser] = useState<User>({} as User);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Get messages from firebase service form collection messages limiting the last 50 messages
-  
+  // use Effect that loads user from storage and sets it to state, if there is no user in storage, open modal to write user name and save it to storage
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      setUser(JSON.parse(user));
+
+      //Get messages
+      getLastMessages(50);
+    } else {
+      console.log(user, "No hubo User");
+      setIsModalOpen(true); // No user found, so open the modal
+    }
+  }, []);
+
+  //Always scroll to bottom once messages list changed
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  function createMessageProperties(message: string): Message {
+    return {
+      id: v4(), //Random id
+      createdAt: Timestamp.now(),
+      text: message,
+      userId: user.id,
+      userName: user.name,
+    };
+  }
+
+  function scrollToBottom() {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }
+
+  function handleUserSubmit(userName: string) {
+    //Create random user
+    const newUser = { ...createUser(), name: userName };
+    console.log(newUser, 'newUserrrrr');
+    localStorage.setItem("user", JSON.stringify(newUser));
+    setUser(newUser);
+    //Get messages
+    getLastMessages(50);
+  }
 
   return (
-    <main className="flex w-full min-h-screen flex-col items-center justify-between p-8 ">
-      <div className="flex-1 w-full space-y-6 overflow-y-auto rounded-xl bg-slate-200 p-4 text-sm leading-6 text-slate-900 shadow-sm dark:bg-slate-900 dark:text-slate-300 sm:text-base sm:leading-7">
-        <div className="flex items-start">
-          <img
-            className="mr-2 h-8 w-8 rounded-full"
-            src="https://dummyimage.com/128x128/363536/ffffff&text=J"
-          />
-          <div className="flex rounded-b-xl rounded-tr-xl bg-slate-50 p-4 dark:bg-slate-800 sm:max-w-md md:max-w-2xl">
-            {/* User ID with hastag */}
-            <p className="font-bold">#1</p> 
-              {/* User name */}
-            <p>Explain quantum computing in simple terms</p>
-          </div>
-        </div>
-        <div className="flex flex-row-reverse items-start">
-          <img
-            className="ml-2 h-8 w-8 rounded-full"
-            src="https://dummyimage.com/128x128/354ea1/ffffff&text=G"
-          />
+    <>
+      {isModalOpen && (
+        <NameModalComponent
+          isOpen={isModalOpen}
+          onSubmit={handleUserSubmit}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
+      <main className="flex w-full min-h-screen flex-col items-center justify-between p-8 ">
+        {!isModalOpen && (
+          <div className="flex flex-col items-center justify-between w-full max-w-[1200px]">
+            <div className="w-full flex items-center justify-center bg-white fixed top-0">
+              <Image
+                src={
+                  "https://assets-global.website-files.com/63b4bdea9865273fd745b3af/63b4bdea9865273cf545b3d1_Asset%206%403x.png"
+                }
+                alt="Codifin"
+                width={200}
+                height={100}
+              />
+            </div>
 
-          <div className="flex min-h-[85px] rounded-b-xl rounded-tl-xl bg-slate-50 p-4 dark:bg-slate-800 sm:min-h-0 sm:max-w-md md:max-w-2xl">
-            <p>
-              Certainly! Quantum computing is a new type of computing that
-              relies on the principles of quantum physics. Traditional
-              computers, like the one you might be using right now, use bits to
-              store and process information. These bits can represent either a 0
-              or a 1. In contrast, quantum computers use quantum bits, or
-              qubits.
-              <br />
-              <br />
-              Unlike bits, qubits can represent not only a 0 or a 1 but also a
-              superposition of both states simultaneously. This means that a
-              qubit can be in multiple states at once, which allows quantum
-              computers to perform certain calculations much faster and more
-              efficiently
-            </p>
+            <div className="flex-1 w-full h-full space-y-6 overflow-y-auto rounded-xl bg-slate-200 p-4 my-8 text-sm leading-6 text-slate-900 shadow-sm dark:bg-slate-900 dark:text-slate-300 sm:text-base sm:leading-7">
+              {
+                // map messages
+                messages &&
+                  messages.map((message) => (
+                    <MessageBubble
+                      key={message.id}
+                      message={message}
+                      user={user}
+                    />
+                  ))
+              }
+              {messages && messages.length < 1 && (
+                <p className="w-full text-center">¡Aún no hay mensajes! 😔 </p>
+              )}
+              {!messages && (
+                <p className="w-full text-center">Cargando mensajes... 🧘 </p>
+              )}
+              {/* Empty Ref for bottom scroll */}
+              <div ref={messagesEndRef}></div>
+              {/* Input box with static text */}
+              <ChatInput
+                onSend={async (messageText) =>
+                  await createMessage(createMessageProperties(messageText))
+                }
+              />
+            </div>
           </div>
-        </div>
-        <div className="flex items-start">
-          <img
-            className="mr-2 h-8 w-8 rounded-full"
-            src="https://dummyimage.com/128x128/363536/ffffff&text=J"
-          />
-          <div className="flex rounded-b-xl rounded-tr-xl bg-slate-50 p-4 dark:bg-slate-800 sm:max-w-md md:max-w-2xl">
-            <p>What are three great applications of quantum computing?</p>
-          </div>
-        </div>
-        <div className="flex flex-row-reverse items-start">
-          <img
-            className="ml-2 h-8 w-8 rounded-full"
-            src="https://dummyimage.com/128x128/354ea1/ffffff&text=G"
-          />
-          <div className="flex min-h-[85px] rounded-b-xl rounded-tl-xl bg-slate-50 p-4 dark:bg-slate-800 sm:min-h-0 sm:max-w-md md:max-w-2xl">
-            <p>
-              Three great applications of quantum computing are: Optimization of
-              complex problems, Drug Discovery and Cryptography.
-            </p>
-          </div>
-        </div>
-        {/* Input box with static text */}
-        <ChatInput onSend={(message) => console.log(message)} />
-      </div>
-    </main>
+        )}
+      </main>
+    </>
   );
 }
