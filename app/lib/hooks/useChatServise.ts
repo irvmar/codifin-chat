@@ -38,14 +38,18 @@ import {
       return onSnapshot(
         query(
           collection(db, `${CHAT_COLLECTION}/${CHAT_ID}/${MESSAGE_COLLECTION}`),
-          orderBy("createdAt", "asc"),
+          orderBy("createdAt", "desc"),
           limit(number)
         ),
         (querySnapshot) => {
           const messages: Message[] = [];
-          querySnapshot.forEach((doc) => {
-            messages.push(doc.data() as Message);
-          });
+
+          //for each querySnapshot element push it to the messages array, from the last to the first
+          for (let i = querySnapshot.docs.length - 1; i >= 0; i--) {
+            const message = querySnapshot.docs[i].data() as Message;
+            messages.push(message);
+          }
+
           setCurrentMessages(messages);
         },
         (err) => {
