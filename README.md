@@ -2,7 +2,7 @@
 # Micro Chat en Tiempo Real
 
 ## Descripción
-Este proyecto es un micro chat en tiempo real desarrollado como parte de una prueba técnica. Utiliza Next.js y Firebase para permitir a los usuarios interactuar en un chat room común. Cada usuario que ingresa a la página obtiene un ID único, escribe un nombre y puede escribir mensajes en un hilo compartido. La interfaz consiste en una lista de mensajes y un input para enviar nuevos mensajes.
+Este proyecto es un micro chat en tiempo real desarrollado como parte de una prueba técnica. Utiliza Next.js y Firebase para permitir a los usuarios interactuar en un chat room común. Cada usuario que ingresa a la página obtiene un ID único, escribe un nombre y puede escribir mensajes en un hilo compartido. La interfaz consiste en una lista de mensajes y un input para enviar nuevos mensajes. El chat está limitado a mostrar solamente los últimos 50 mensajes.
 
 ## Tecnologías Utilizadas
 - Next.js
