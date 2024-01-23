@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# Micro Chat en Tiempo Real
 
-First, run the development server:
+## Descripción
+Este proyecto es un micro chat en tiempo real desarrollado como parte de una prueba técnica. Utiliza Next.js y Firebase para permitir a los usuarios interactuar en un chat room común. Cada usuario que ingresa a la página obtiene un ID único, escribe un nombre y puede escribir mensajes en un hilo compartido. La interfaz consiste en una lista de mensajes y un input para enviar nuevos mensajes.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Tecnologías Utilizadas
+- Next.js
+- Firebase
+- Tailwind
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Características
+- Chat en tiempo real
+- Generación automática de ID de usuario al ingresara
+- Interfaz simple con lista de mensajes y campo de entrada
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Instalación y Ejecución
+1. Clona el repositorio:
+   ```
+   git clone https://github.com/irvmar/codifin-chat
+   ```
+2. Instala las dependencias:
+   ```
+   npm install
+   ```
+3. Ejecuta la aplicación en modo de desarrollo:
+   ```
+   npm run dev
+   ```
+   Abre [http://localhost:3000](http://localhost:3000) para verlo en el navegador.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Demo en Vivo
+Puedes acceder a una versión en vivo de la aplicación desplegada en Vercel: [https://codifin-chat.vercel.app/](https://codifin-chat.vercel.app/)
 
-## Learn More
+## Autor
+Irving Ariel Marín Salazar
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Licencia
+Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE.md](LICENSE.md) para detalles.
